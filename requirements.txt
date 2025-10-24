@@ -4,4 +4,4 @@ plotly
 
 # needed for plotly
 nbformat
-statsmodelswhere
+statsmodels
