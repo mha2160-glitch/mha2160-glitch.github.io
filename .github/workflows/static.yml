@@ -1,39 +1,37 @@
-# https://jupyterbook.org/en/stable/publish/gh-pages.html
-
-name: Deploy to GitHub Pages
+name: Deploy Portfolio
 
 on:
   push:
     branches:
-      - main
+      - main  # Or any branch you're using to trigger the deployment
 
 jobs:
-  deploy-book:
+  deploy:
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
+
     steps:
-      - uses: actions/checkout@v5
+    # Step 1: Checkout repository
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.14"
-          cache: pip
-      - run: 
-          pip install -r requirements.txt
-          pip install jupyter-book
+    # Step 2: Set up Python
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'  # Or another version you're using
 
-      - name: Build the book
-        run: |
-          jupyter-book build .
+    # Step 3: Install dependencies
+    - name: Install Jupyter Book and dependencies
+      run: |
+        pip install --upgrade pip
+        pip install jupyter-book  # Install Jupyter Book
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: _build/html
+    # Step 4: Check if jupyter-book is available
+    - name: Check jupyter-book installation
+      run: |
+        which jupyter-book
+        jupyter-book --version
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+    # Step 5: Build the Jupyter Book
+    - name: Build the Jupyter Book
+      run: jupyter-book build .
